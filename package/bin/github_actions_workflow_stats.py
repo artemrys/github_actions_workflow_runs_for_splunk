@@ -7,10 +7,9 @@ import traceback
 
 import import_declare_test  # noqa
 import requests
+from github_actions_workflow_constants import APP_NAME
 from solnlib import conf_manager, log, modular_input
 from splunklib import modularinput as smi
-
-APP_NAME = "github_actions_workflow_runs_for_splunk"
 
 
 def _get_github_pat(session_key: str, account_name: str) -> str:
@@ -92,16 +91,16 @@ class Input(smi.Script):
         scheme.add_argument(
             smi.Argument(
                 "github_username",
-                title="Github username",
-                description="Github username",
+                title="GitHub username",
+                description="GitHub username",
                 required_on_create=True,
             )
         )
         scheme.add_argument(
             smi.Argument(
                 "github_repo",
-                title="Github repo",
-                description="Github repo",
+                title="GitHub repo",
+                description="GitHub repo",
                 required_on_create=True,
             )
         )
@@ -123,7 +122,9 @@ class Input(smi.Script):
                     conf_name="github_actions_workflow_runs_for_splunk_settings",
                 )
                 logger.setLevel(log_level)
-                checkpoint_collection = "github_actions_workflow_runs_for_splunk"
+                checkpoint_collection = (
+                    f"github_actions_workflow_runs_for_splunk_{normalized_input_name}"
+                )
                 github_username = input_item.get("github_username")
                 github_repo = input_item.get("github_repo")
                 checkpointer = modular_input.KVStoreCheckpointer(
@@ -131,8 +132,7 @@ class Input(smi.Script):
                     session_key,
                     APP_NAME,
                 )
-                checkpoint_name = f"{github_username}/{github_repo}"
-                checkpoint = checkpointer.get(checkpoint_name)
+                checkpoint = checkpointer.get("checkpoint")
                 if checkpoint is not None:
                     checkpoint = checkpoint.get("checkpoint")
                     logger.info(f"Stored checkpoint {checkpoint}")
@@ -170,7 +170,7 @@ class Input(smi.Script):
                         logger.info(f"Event written that occured @ {event_time}")
                     latest_event_time = workflow_runs[0]["run_started_at"]
                     checkpointer.update(
-                        checkpoint_name,
+                        "checkpoint",
                         {"checkpoint": latest_event_time},
                     )
                     logger.info(f"Saved checkpoint @ {latest_event_time}")
@@ -180,13 +180,13 @@ class Input(smi.Script):
                         "T", "milliseconds"
                     )
                     checkpointer.update(
-                        checkpoint_name,
+                        "checkpoint",
                         {"checkpoint": checkpoint_time},
                     )
                     logger.info(f"Saved checkpoint @ {checkpoint_time}")
             except Exception as e:
                 logger.error(
-                    f"Exception raised while ingesting Github Action workflow "
+                    f"Exception raised while ingesting GitHub Action workflow "
                     f"runs: {e}. Traceback: {traceback.format_exc()}"
                 )
 
