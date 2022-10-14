@@ -38,6 +38,7 @@ def _logger_for_input(input_name: str) -> logging.Logger:
 
 
 def _get_workflow_runs_for_repo(
+    logger: logging.Logger,
     username: str,
     repo: str,
     token: str,
@@ -46,8 +47,10 @@ def _get_workflow_runs_for_repo(
     results = []
     page = 1
     while True:
+        start_time = time.time()
+        url = f"https://api.github.com/repos/{username}/{repo}/actions/runs"
         response = requests.get(
-            f"https://api.github.com/repos/{username}/{repo}/actions/runs",
+            url,
             params={
                 "created": created,
                 "page": page,
@@ -57,7 +60,11 @@ def _get_workflow_runs_for_repo(
                 "Accept": "application/vnd.github+json",
                 "Authorization": f"token {token}",
             },
+            timeout=60,
         )
+        end_time = time.time()
+        request_time = round(end_time - start_time, 4)
+        logger.debug(f"Request to {url} took {request_time}")
         response.raise_for_status()
         workflow_runs = response.json()["workflow_runs"]
         if len(workflow_runs) == 0:
@@ -142,6 +149,7 @@ class Input(smi.Script):
                     f"Getting workflow runs for {github_username}/{github_repo}"
                 )
                 workflow_runs = _get_workflow_runs_for_repo(
+                    logger,
                     github_username,
                     github_repo,
                     github_token,
