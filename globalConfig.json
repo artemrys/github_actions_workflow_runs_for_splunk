@@ -152,21 +152,21 @@
                         },
                         {
                             "type": "text",
-                            "label": "Github username",
+                            "label": "GitHub username",
                             "field": "github_username",
-                            "help": "Github username",
+                            "help": "GitHub username",
                             "required": true
                         },
                         {
                             "type": "text",
-                            "label": "Github repository",
+                            "label": "GitHub repository",
                             "field": "github_repo",
-                            "help": "Github repository",
+                            "help": "GitHub repository",
                             "required": true
                         },
                         {
                             "type": "singleSelect",
-                            "label": "Github PAT",
+                            "label": "GitHub PAT",
                             "options": {
                                 "referenceName": "github_pats"
                             },
@@ -175,7 +175,7 @@
                             "required": true
                         }
                     ],
-                    "title": "Github Actions Workflow Stats"
+                    "title": "GitHub Actions Workflow Stats"
                 }
             ],
             "title": "Inputs",
@@ -234,7 +234,7 @@
         "name": "github_actions_workflow_runs_for_splunk",
         "restRoot": "github_actions_workflow_runs_for_splunk",
         "version": "0.0.1",
-        "displayName": "Github Actions workflow runs stats to Splunk",
+        "displayName": "GitHub Actions workflow runs stats to Splunk",
         "schemaVersion": "0.0.3"
     }
 }
