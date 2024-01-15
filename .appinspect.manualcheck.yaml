@@ -1,0 +1,18 @@
+check_for_remote_code_execution_in_javascript:
+  comment: 'checked'
+check_for_builtin_functions:
+  comment: 'checked'
+check_for_file_and_directory_access:
+  comment: 'checked'
+check_for_generic_operating_system_services:
+  comment: 'checked'
+check_for_importing_modules:
+  comment: 'checked'
+check_for_plain_text_credentials_in_python:
+  comment: 'checked'
+check_for_environment_variable_use_in_python:
+  comment: 'checked'
+check_for_secret_disclosure:
+  comment: 'checked'
+check_for_executable_flag:
+  comment: 'checked'
