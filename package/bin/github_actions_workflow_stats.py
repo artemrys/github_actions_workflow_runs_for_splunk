@@ -167,7 +167,7 @@ class Input(smi.Script):
                             sourcetype="github:workflow_runs",
                         )
                         event_writer.write_event(event)
-                        logger.info(f"Event written that occured @ {event_time}")
+                        logger.info(f"Event written that occurred @ {event_time}")
                     latest_event_time = workflow_runs[0]["run_started_at"]
                     checkpointer.update(
                         "checkpoint",
